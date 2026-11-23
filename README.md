@@ -7,10 +7,12 @@ The shared WebAssembly runtime for RuyiSDK device provisioning. This repository 
 The runtime is loaded by `device-worker.js`. A task message contains:
 
 - `id`: caller-selected task identifier.
-- `job.kind`: `warmup`, `gzip`, `hash`, `extract`, `preview`, or `flash`.
+- `job.kind`: `warmup`, `gzip`, `hash`, `extract`, `preview`, `flash`, or `message`.
 - `runtimeURL`: base URL ending in `/device-runtime/`.
 - `api`: packages-index API base URL.
 - `reportProgress`: whether extraction progress should be posted.
+
+For `job.kind = "message"`, pass the TOML catalog contents in `job.text`, the message key in `job.id`, and the requested language in `job.locale`. The worker returns the matching translation in `result`, falling back to `en_US`. If the message table exists but neither language is present, `result` is `null`. Invalid TOML or a missing message table produces an `error` reply.
 
 The worker posts messages with one of:
 
